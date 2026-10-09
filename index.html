@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lantern Theatre</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>Lantern Theatre</h1>
+    <p>Click a seat to look at it, then press Add to cart.</p>
+  </header>
+
+  <main class="page-main">
+
+    <section class="map-area">
+
+      <div class="controls">
+        <button id="zoom-in" title="Zoom in">+</button>
+        <button id="zoom-out" title="Zoom out">-</button>
+        <button id="move-up" title="Move up">&uarr;</button>
+        <button id="move-down" title="Move down">&darr;</button>
+        <button id="move-left" title="Move left">&larr;</button>
+        <button id="move-right" title="Move right">&rarr;</button>
+        <button id="reset">Reset view</button>
+      </div>
+
+      <div class="viewport" id="viewport">
+        <div class="venue" id="venue">
+          <div class="stage">STAGE</div>
+        </div>
+      </div>
+
+      <ul class="legend">
+        <li><span class="dot available"></span> Available</li>
+        <li><span class="dot selected"></span> Looking at</li>
+        <li><span class="dot in-cart"></span> In cart</li>
+        <li><span class="dot taken"></span> Unavailable</li>
+      </ul>
+    </section>
+
+    <aside class="side">
+      <section class="box">
+        <h2>Seat details</h2>
+        <p id="seat-text">No seat chosen yet.</p>
+        <button id="add-btn" disabled>Add to cart</button>
+      </section>
+
+      <section class="box">
+        <h2>Your cart</h2>
+        <ul id="cart-list"></ul>
+        <p id="cart-empty">Your cart is empty.</p>
+        <p class="total">Total: $<span id="total">0</span></p>
+      </section>
+
+      <section class="box">
+        <h2>Prices</h2>
+        <ul id="price-list">
+          <li>Front Stalls: $60</li>
+          <li>Dress Circle: $40</li>
+          <li>Balcony: $25</li>
+        </ul>
+      </section>
+    </aside>
+
+  </main>
+
+</body>
+</html>
