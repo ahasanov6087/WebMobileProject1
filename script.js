@@ -37,5 +37,36 @@ function findSeat(id) {
 }
 
 createSeats();
-console.log(`${seats.length} seats created`);
-console.log(findSeat("A-5"));
+let cart = [];
+
+function isInCart(id) {
+  return cart.includes(id);
+}
+
+function addToCart(id) {
+  const seat = findSeat(id);
+
+  if (seat === undefined) return false;
+  if (seat.taken) return false;
+  if (isInCart(id)) return false;
+
+  cart.push(id);
+  return true;
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item !== id);
+}
+
+function getTotal() {
+  return cart.reduce((sum, id) => sum + findSeat(id).price, 0);
+}
+
+console.log(addToCart("A-1"));
+console.log(addToCart("A-1"));
+console.log(addToCart("A-5"));
+console.log(addToCart("F-1"));
+console.log(getTotal());
+removeFromCart("A-1");
+console.log(cart, getTotal());
+cart = [];
