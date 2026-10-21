@@ -37,6 +37,7 @@ function findSeat(id) {
 }
 
 createSeats();
+
 let cart = [];
 
 function isInCart(id) {
@@ -62,11 +63,64 @@ function getTotal() {
   return cart.reduce((sum, id) => sum + findSeat(id).price, 0);
 }
 
-console.log(addToCart("A-1"));
-console.log(addToCart("A-1"));
-console.log(addToCart("A-5"));
-console.log(addToCart("F-1"));
-console.log(getTotal());
-removeFromCart("A-1");
-console.log(cart, getTotal());
 cart = [];
+
+const venue = document.getElementById("venue");
+const viewport = document.getElementById("viewport");
+const priceList = document.getElementById("price-list");
+
+function renderVenue() {
+  for (const section of sections) {
+    const sectionDiv = document.createElement("div");
+    sectionDiv.classList.add("section", section.id);
+
+    const title = document.createElement("h3");
+    title.textContent = `${section.name} - $${section.price}`;
+    sectionDiv.append(title);
+
+    for (const rowLetter of section.rows) {
+      const rowDiv = document.createElement("div");
+      rowDiv.classList.add("row");
+
+      const label = document.createElement("span");
+      label.classList.add("row-label");
+      label.textContent = rowLetter;
+      rowDiv.append(label);
+
+      const rowSeats = seats.filter(seat => seat.row === rowLetter);
+
+      for (const seat of rowSeats) {
+        const btn = document.createElement("button");
+        btn.classList.add("seat", section.id);
+        btn.setAttribute("data-id", seat.id);
+        btn.setAttribute("title", `Row ${seat.row}, seat ${seat.number}`);
+        btn.setAttribute("aria-label", `${seat.section}, row ${seat.row}, seat ${seat.number}`);
+
+        if (seat.number === section.seatsPerRow / 2) {
+          btn.classList.add("aisle-after");
+        }
+
+        if (seat.taken) {
+          btn.classList.add("taken");
+        }
+
+        rowDiv.append(btn);
+      }
+
+      sectionDiv.append(rowDiv);
+    }
+
+    venue.append(sectionDiv);
+  }
+}
+
+function renderPrices() {
+  for (const section of sections) {
+    const li = document.createElement("li");
+    li.textContent = `${section.name}: $${section.price}`;
+    priceList.append(li);
+  }
+}
+
+renderVenue();
+renderPrices();
