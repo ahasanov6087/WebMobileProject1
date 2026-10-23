@@ -122,5 +122,67 @@ function renderPrices() {
   }
 }
 
+const seatText = document.getElementById("seat-text");
+const addBtn = document.getElementById("add-btn");
+
+let selectedId = null;
+
+function showSeatDetails() {
+  const seat = findSeat(selectedId);
+  seatText.textContent = `${seat.section}, row ${seat.row}, seat ${seat.number} - $${seat.price}`;
+
+  if (isInCart(selectedId)) {
+    addBtn.disabled = true;
+    addBtn.textContent = "Already in cart";
+  } else {
+    addBtn.disabled = false;
+    addBtn.textContent = "Add to cart";
+  }
+}
+
+function inspectSeat(id) {
+  const seat = findSeat(id);
+
+  if (seat.taken) {
+    selectedId = null;
+    seatText.textContent = `Seat ${id} is not available.`;
+    addBtn.disabled = true;
+    addBtn.textContent = "Add to cart";
+  } else {
+    selectedId = id;
+    showSeatDetails();
+  }
+
+  updateSeatColours();
+}
+
+function updateSeatColours() {
+  const allSeats = document.querySelectorAll(".seat");
+
+  allSeats.forEach(btn => {
+    const id = btn.getAttribute("data-id");
+    const inCart = isInCart(id);
+
+    if (inCart) {
+      btn.classList.add("in-cart");
+    } else {
+      btn.classList.remove("in-cart");
+    }
+
+    if (id === selectedId && !inCart) {
+      btn.classList.add("selected");
+    } else {
+      btn.classList.remove("selected");
+    }
+  });
+}
+
+venue.addEventListener("click", event => {
+  const btn = event.target.closest(".seat");
+  if (!btn) return;
+
+  inspectSeat(btn.getAttribute("data-id"));
+});
+
 renderVenue();
 renderPrices();
