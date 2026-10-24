@@ -184,5 +184,63 @@ venue.addEventListener("click", event => {
   inspectSeat(btn.getAttribute("data-id"));
 });
 
+const cartList = document.getElementById("cart-list");
+const cartEmpty = document.getElementById("cart-empty");
+const totalSpan = document.getElementById("total");
+
+function cartChanged() {
+  drawCart();
+  updateSeatColours();
+
+  if (selectedId !== null) {
+    showSeatDetails();
+  }
+}
+
+function drawCart() {
+  cartList.replaceChildren();
+
+  for (const id of cart) {
+    const seat = findSeat(id);
+
+    const li = document.createElement("li");
+
+    const text = document.createElement("span");
+    text.textContent = `Row ${seat.row} seat ${seat.number} (${seat.section}) - $${seat.price}`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.setAttribute("data-id", id);
+
+    li.append(text, removeBtn);
+    cartList.append(li);
+  }
+
+  if (cart.length === 0) {
+    cartEmpty.style.display = "block";
+  } else {
+    cartEmpty.style.display = "none";
+  }
+
+  totalSpan.textContent = getTotal();
+}
+
+addBtn.addEventListener("click", () => {
+  if (selectedId === null) return;
+
+  addToCart(selectedId);
+  cartChanged();
+});
+
+cartList.addEventListener("click", event => {
+  const btn = event.target.closest("button");
+  if (!btn) return;
+
+  removeFromCart(btn.getAttribute("data-id"));
+  cartChanged();
+});
+
 renderVenue();
 renderPrices();
+updateSeatColours();
+drawCart();
