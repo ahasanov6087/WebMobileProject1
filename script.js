@@ -240,7 +240,65 @@ cartList.addEventListener("click", event => {
   cartChanged();
 });
 
+const STEP = 60;
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 2.5;
+const PAN_LIMIT = 500;
+
+let zoom = 1;
+let panX = 0;
+let panY = 0;
+
+function applyView() {
+  panX = Math.max(-PAN_LIMIT, Math.min(PAN_LIMIT, panX));
+  panY = Math.max(-PAN_LIMIT, Math.min(PAN_LIMIT, panY));
+  zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+  zoom = Math.round(zoom * 10) / 10;
+
+  venue.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+}
+
+function resetView() {
+  zoom = 1;
+  panX = 0;
+  panY = 0;
+  applyView();
+}
+
+document.getElementById("zoom-in").addEventListener("click", () => {
+  zoom = zoom + 0.2;
+  applyView();
+});
+
+document.getElementById("zoom-out").addEventListener("click", () => {
+  zoom = zoom - 0.2;
+  applyView();
+});
+
+document.getElementById("move-up").addEventListener("click", () => {
+  panY = panY + STEP;
+  applyView();
+});
+
+document.getElementById("move-down").addEventListener("click", () => {
+  panY = panY - STEP;
+  applyView();
+});
+
+document.getElementById("move-left").addEventListener("click", () => {
+  panX = panX + STEP;
+  applyView();
+});
+
+document.getElementById("move-right").addEventListener("click", () => {
+  panX = panX - STEP;
+  applyView();
+});
+
+document.getElementById("reset").addEventListener("click", resetView);
+
 renderVenue();
 renderPrices();
 updateSeatColours();
 drawCart();
+applyView();
