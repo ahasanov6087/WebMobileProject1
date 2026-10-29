@@ -189,11 +189,12 @@ const cartEmpty = document.getElementById("cart-empty");
 const totalSpan = document.getElementById("total");
 
 function cartChanged() {
-  drawCart();
-  updateSeatColours();
+    saveCart();  
+    drawCart();
+    updateSeatColours();
 
-  if (selectedId !== null) {
-    showSeatDetails();
+    if (selectedId !== null) {
+        showSeatDetails();
   }
 }
 
@@ -297,8 +298,29 @@ document.getElementById("move-right").addEventListener("click", () => {
 
 document.getElementById("reset").addEventListener("click", resetView);
 
+function saveCart() {
+  localStorage.setItem("lanternCart", JSON.stringify(cart));
+}
+
+function loadCart() {
+  const saved = localStorage.getItem("lanternCart");
+  if (saved === null) return;
+
+  try {
+    const ids = JSON.parse(saved);
+
+    cart = ids.filter(id => {
+      const seat = findSeat(id);
+      return seat !== undefined && !seat.taken;
+    });
+  } catch (error) {
+    cart = [];
+  }
+}
+
 renderVenue();
 renderPrices();
+loadCart();
 updateSeatColours();
 drawCart();
 applyView();
