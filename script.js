@@ -178,6 +178,8 @@ function updateSeatColours() {
 }
 
 venue.addEventListener("click", event => {
+  if (justDragged) return;
+
   const btn = event.target.closest(".seat");
   if (!btn) return;
 
@@ -317,6 +319,59 @@ function loadCart() {
     cart = [];
   }
 }
+
+viewport.addEventListener("wheel", event => {
+  event.preventDefault();
+
+  if (event.deltaY < 0) {
+    zoom = zoom + 0.1;
+  } else {
+    zoom = zoom - 0.1;
+  }
+  applyView();
+}, { passive: false });
+
+let dragging = false;
+let justDragged = false;
+let movedFar = false;
+let lastX = 0;
+let lastY = 0;
+
+viewport.addEventListener("mousedown", event => {
+  dragging = true;
+  movedFar = false;
+  lastX = event.clientX;
+  lastY = event.clientY;
+});
+
+window.addEventListener("mousemove", event => {
+  if (!dragging) return;
+
+  const dx = event.clientX - lastX;
+  const dy = event.clientY - lastY;
+
+  if (Math.abs(dx) + Math.abs(dy) > 4) {
+    movedFar = true;
+  }
+
+  panX = panX + dx;
+  panY = panY + dy;
+  lastX = event.clientX;
+  lastY = event.clientY;
+  applyView();
+});
+
+window.addEventListener("mouseup", () => {
+  if (!dragging) return;
+  dragging = false;
+
+  if (movedFar) {
+    justDragged = true;
+    setTimeout(() => {
+      justDragged = false;
+    }, 50);
+  }
+});
 
 renderVenue();
 renderPrices();
