@@ -15,17 +15,17 @@ const seats = [];
 function createSeats() {
     for (const section of sections) {
         for (const rowLetter of section.rows) {
-        for (let n = 1; n <= section.seatsPerRow; n++) {
-            const id = `${rowLetter}-${n}`;
+            for (let n = 1; n <= section.seatsPerRow; n++) {
+                const id = `${rowLetter}-${n}`;
 
-            seats.push({
-            id: id,
-            sectionId: section.id,
-            section: section.name,
-            row: rowLetter,
-            number: n,
-            price: section.price,
-            taken: takenSeats.includes(id)
+                seats.push({
+                id: id,
+                sectionId: section.id,
+                section: section.name,
+                row: rowLetter,
+                number: n,
+                price: section.price,
+                taken: takenSeats.includes(id)
             });
         }
         }
